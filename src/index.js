@@ -261,7 +261,7 @@ function renderContact(contact) {
     company: { name },
   } = contact;
 
-const contactInfo = `
+  const contactInfo = `
 <div class="card" data-id="${id}">
   <button class="deleteBtn" title="Delete this contact">X</button>
   <div class="avatar">
@@ -291,7 +291,7 @@ const contactInfo = `
   </div>
 </div>
 `;
-return contactInfo;
+  return contactInfo;
 }
 
 /*
@@ -299,15 +299,26 @@ return contactInfo;
   The contacts should be rendered in the `section` with id "contacts".
 */
 function render(contacts) {
-  
+  //Select the #contacts element
+  const contactsInfo = document.querySelector("#contacts");
+  //Empty out the #contacts element
+  contactsInfo.innerHTML = "";
+  //Render a contact list from the initial contacts
+  contactsInfo.innerHTML = contacts.map(renderContact).join("");
 }
+//#contacts element
+//outerHTML: The element includes the descendant, in this case, <section></section>
+//innerHTML: All the texts plus the markups inside the <section></section>
+//innerTEXT: All the texts inside the <section></section>
 
 /*
-  Filter by city. Filter the  array of contacts by the given city.
+  Filter by city. Filter the array of contacts by the given city.
   Return a new array containing the filtered list. 
   Do NOT modify the original array.
 */
-function filterByCity(city) {}
+function filterByCity(city) {
+  let filteredContacts = [];
+}
 
 /*
   Add an `change` event listener to the `filterOptions` select element.
@@ -316,7 +327,21 @@ function filterByCity(city) {}
   If the value is not "0" call `filterByCity()` passing the value selected by
   the user. Then call `render()` with the filtered list.
 */
-function filterHandler() {}
+function filterHandler() {
+  //Select the `filterForm` link
+  const contactsByCity = document.querySelector("#filterOptions");
+  //Add an event listener
+  contactsByCity.addEventListener("change", (evt) => {
+    //When a change event is fired,
+    //the value option is returned and we want to parse that;
+    const city = evt.target.value;
+    if (city === "0") {
+      render(contacts);
+    } else {
+      render(filterByCity(city));
+    }
+  });
+}
 
 /*
   Accepts an array of contacts.
@@ -343,7 +368,9 @@ function deleteButtonHandler() {}
   Perform all startup tasks here. Use this function to attach the 
   required event listeners, call loadCities() then call render().
 */
-function main() {}
+function main() {
+  render(contacts);
+}
 
 window.addEventListener("DOMContentLoaded", main);
 

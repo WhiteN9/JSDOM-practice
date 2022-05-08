@@ -299,7 +299,7 @@ function renderContact(contact) {
   The contacts should be rendered in the `section` with id "contacts".
 */
 function render(contacts) {
-  //Select the #contacts element
+  //Select the section #contacts element
   const contactsInfo = document.querySelector("#contacts");
   //Empty out the #contacts element
   contactsInfo.innerHTML = "";
@@ -316,9 +316,7 @@ function render(contacts) {
   Return a new array containing the filtered list. 
   Do NOT modify the original array.
 */
-function filterByCity(city) {
-  let filteredContacts = [];
-}
+function filterByCity(city) {}
 
 /*
   Add an `change` event listener to the `filterOptions` select element.
@@ -329,7 +327,7 @@ function filterByCity(city) {
 */
 function filterHandler() {
   //Select the `filterForm` link
-  const contactsByCity = document.querySelector("#filterOptions");
+  const contactsByCity = document.querySelector("select#filterOptions");
   //Add an event listener
   contactsByCity.addEventListener("change", (evt) => {
     //When a change event is fired,
@@ -349,7 +347,26 @@ function filterHandler() {
   Create a list of cities from the contacts array with no duplicates then
   add an `<option>` element for each city to the select.
 */
-function loadCities(contacts) {}
+function loadCities(contacts) {
+  //get the parent element #filterOptions
+  const filterOptions = document.querySelector("select#filterOptions");
+  //make an array with default value
+  // let array = [`<option value="0">-- Select a city --</option>`];
+  if (contacts.length > 0) {
+    const citiesList = contacts
+      .map(({ address: { city } }) => {
+        return `<option value="${city}">${city}<options>`;
+      }) /*
+      If the given value is the first occurring, 
+      its index will be equal to the index of the parameter
+      If not 1st occuring,
+      it must be a duplicate and will not be copied.*/
+      .filter((value, index, self) => {
+        return self.indexOf(value) === index;
+      });
+    filterOptions.innerHTML += citiesList.join("");
+  }
+}
 
 /*
   Remove the contact from the contact list with the given id.
@@ -370,6 +387,8 @@ function deleteButtonHandler() {}
 */
 function main() {
   render(contacts);
+  filterHandler();
+  loadCities(contacts);
 }
 
 window.addEventListener("DOMContentLoaded", main);

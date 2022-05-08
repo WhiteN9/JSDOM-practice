@@ -316,7 +316,17 @@ function render(contacts) {
   Return a new array containing the filtered list. 
   Do NOT modify the original array.
 */
-function filterByCity(city) {}
+function filterByCity(city) {
+  let filteredContacts = [];
+  if (contacts.length) {
+    return contacts.filter((contact) => {
+      if (contact.address.city === city) {
+        //console.log(contact);
+        return contact;
+      }
+    });
+  } else return filteredContacts;
+}
 
 /*
   Add an `change` event listener to the `filterOptions` select element.

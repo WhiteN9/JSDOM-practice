@@ -361,7 +361,6 @@ function loadCities(contacts) {
   //get the parent element #filterOptions
   const filterOptions = document.querySelector("select#filterOptions");
   //make an array with default value
-  // let array = [`<option value="0">-- Select a city --</option>`];
   if (contacts.length > 0) {
     const citiesList = contacts
       .map(({ address: { city } }) => {
@@ -375,13 +374,27 @@ function loadCities(contacts) {
         return self.indexOf(value) === index;
       });
     filterOptions.innerHTML += citiesList.join("");
-  }
+  } //once it is rendered, if we need to re-render but with no cities
+  //we set the innerHTML of #filterOptions the default value, no need to be in array
+  else filterOptions.innerHTML = `<option value="0">-- Select a city --</option>`;
 }
 
 /*
   Remove the contact from the contact list with the given id.
 */
-function deleteContact(id) {}
+function deleteContact(id) {
+  //Select all the buttons again
+  const removeContactBtn = document.querySelectorAll(".deleteBtn");
+  removeContactBtn.forEach((btn) => {
+    if (btn.parentElement.getAttribute("data-id") == id) {
+      for (let i = 0; i < contacts.length; i++) {
+        if (contacts[i].id == id) {
+          contacts.splice(i, 1);
+        }
+      }
+    }
+  });
+}
 
 /*
   Add a `click` event handler to the `deleteBtn` elements.
@@ -412,6 +425,7 @@ function main() {
   render(contacts);
   filterHandler();
   loadCities(contacts);
+  deleteButtonHandler();
 }
 
 window.addEventListener("DOMContentLoaded", main);

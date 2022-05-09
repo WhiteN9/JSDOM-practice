@@ -390,7 +390,20 @@ function deleteContact(id) {}
   the list.
 */
 function deleteButtonHandler() {}
-
+//Select all the buttons for all the contacts
+const removeContactBtn = document.querySelectorAll(".deleteBtn");
+//add the event listener
+removeContactBtn.forEach((btn) => {
+  btn.addEventListener("click", (event) => {
+    //get the id value of the data-id class,
+    //data-id class is the direct ascendant of the deleteBtn class
+    //invoke the deleteContact() function
+    //to find and remove the element with that id
+    deleteContact(event.target.parentNode.getAttribute("data-id"));
+    //re-render contacts again
+    render(contacts);
+  });
+});
 /*
   Perform all startup tasks here. Use this function to attach the 
   required event listeners, call loadCities() then call render().

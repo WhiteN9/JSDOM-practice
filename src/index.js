@@ -305,6 +305,7 @@ function render(contacts) {
   contactsInfo.innerHTML = "";
   //Render a contact list from the initial contacts
   contactsInfo.innerHTML = contacts.map(renderContact).join("");
+  deleteButtonHandler();
 }
 //#contacts element
 //outerHTML: The element includes the descendant, in this case, <section></section>
@@ -376,7 +377,8 @@ function loadCities(contacts) {
     filterOptions.innerHTML += citiesList.join("");
   } //once it is rendered, if we need to re-render but with no cities
   //we set the innerHTML of #filterOptions the default value, no need to be in array
-  else filterOptions.innerHTML = `<option value="0">-- Select a city --</option>`;
+  else
+    filterOptions.innerHTML = `<option value="0">-- Select a city --</option>`;
 }
 
 /*
@@ -402,30 +404,35 @@ function deleteContact(id) {
   corresponding `data-id` then call `deleteContact()` and re-render 
   the list.
 */
-function deleteButtonHandler() {}
-//Select all the buttons for all the contacts
-const removeContactBtn = document.querySelectorAll(".deleteBtn");
-//add the event listener
-removeContactBtn.forEach((btn) => {
-  btn.addEventListener("click", (event) => {
-    //get the id value of the data-id class,
-    //data-id class is the direct ascendant of the deleteBtn class
-    //invoke the deleteContact() function
-    //to find and remove the element with that id
-    deleteContact(event.target.parentNode.getAttribute("data-id"));
-    //re-render contacts again
-    render(contacts);
+function deleteButtonHandler() {
+  //Select all the buttons for all the contacts
+  const removeContactBtn = document.querySelectorAll(".deleteBtn");
+  //add the event listener
+  removeContactBtn.forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      //get the id value of the data-id class,
+      //data-id class is the direct ascendant of the deleteBtn class
+      //invoke the deleteContact() function
+      //to find and remove the element with that id
+      deleteContact(event.target.parentNode.getAttribute("data-id"));
+      //re-render contacts again
+      render(contacts);
+    });
   });
-});
+}
 /*
   Perform all startup tasks here. Use this function to attach the 
   required event listeners, call loadCities() then call render().
 */
+
+//Extra optimization, instead of calling the deleteButtonHandler() only once per loaded main.
+//We can move it into render() so that each time we re-render,
+// the deleteButtonHandler() will be ready to run again
 function main() {
   render(contacts);
   filterHandler();
   loadCities(contacts);
-  deleteButtonHandler();
+  // deleteButtonHandler();
 }
 
 window.addEventListener("DOMContentLoaded", main);
